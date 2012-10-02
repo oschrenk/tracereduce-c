@@ -1,9 +1,9 @@
 CXX=g++
 CXXFLAGS=-g -Wall
 TARGET=ref
-BOOST_HOME = /usr/local/boost_1_49_0
-BOOST_INCLUDE =  /usr/local/boost_1_49_0
-BOOST_LIB = /usr/local/boost_1_49_0/stage/lib
+BOOST_HOME = /usr/local/Cellar/boost/1.50.0
+BOOST_INCLUDE =  /usr/local/Cellar/boost/1.50.0/include
+BOOST_LIB = /usr/local/Cellar/boost/1.50.0/lib
 
 INCLUDE= -I $(BOOST_INCLUDE)
 LIBS= -L $(BOOST_LIB)
@@ -23,10 +23,10 @@ $(TARGET):$(OBJS)
 
 main.o:main.cpp LinearApproximationReferenceAlgorithm.hpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c main.cpp -o main.o
-	
+
 EuclideanGeometry.o:EuclideanGeometry.cpp EuclideanGeometry.hpp Geometry.hpp
 	$(CXX) $(CXXFLAGS) -c EuclideanGeometry.cpp -o EuclideanGeometry.o
-	
+
 Vertex.o: Vertex.hpp
 	$(CXX) $(CXXFLAGS) -c Vertex.cpp -o Vertex.o
 
