@@ -16,7 +16,7 @@ main.o:main.cpp Geometry.hpp
 
 Point.o:Point.cpp Point.hpp
 	$(CXX) $(CXXFLAGS) -c Point.cpp -o Point.o
-	
+
 DouglasPeuckerReferenceAlgorithm.o:DouglasPeuckerReferenceAlgorithm.cpp DouglasPeuckerReferenceAlgorithm.hpp Geometry.hpp
 	$(CXX) $(CXXFLAGS) -c DouglasPeuckerReferenceAlgorithm.cpp -o DouglasPeuckerReferenceAlgorithm.o
 

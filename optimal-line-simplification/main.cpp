@@ -17,7 +17,7 @@
  * Created:     Sep 26, 2012
  *
  * Copyright (c) 2008 Q2WEB GmbH.
- * All rights reserved. 
+ * All rights reserved.
  *
  *******************************************************************************
  */
@@ -34,6 +34,10 @@
 #include <boost/filesystem.hpp>
 #include <sstream>
 #include <fstream>
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 
 #include "Point.hpp"
 #include "EuclideanGeometry.hpp"
@@ -117,7 +121,9 @@ int main() {
 
 	std::vector<com::acme::Point*> testVec;
 
-	std::string folderPath("../highway");
+	struct passwd *pw = getpwuid(getuid());
+	std::string homedir (pw->pw_dir);
+	std::string folderPath(homedir + "/data/highway");
 	std::vector<std::string> files = std::vector<std::string>();
 
 	getdir(folderPath, files);
