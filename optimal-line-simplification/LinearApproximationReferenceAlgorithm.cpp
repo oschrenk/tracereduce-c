@@ -86,14 +86,14 @@ std::vector<Point*> LinearApproximationReferenceAlgorithm::getPolylineSimplifica
 	dijkstra_shortest_paths(g, source,
 			predecessor_map(&p[0]).distance_map(&d[0]));
 
-	std::cout << "distances and parents:" << std::endl;
-	graph_traits<graph_t>::vertex_iterator vi, vend;
-	for (boost::tie(vi, vend) = vertices(g); vi != vend; ++vi) {
-		std::cout << "distance(" << *vi << ") = " << d[*vi] << ", ";
-		std::cout << "parent(" << *vi << ") = " << p[*vi] << std::endl;
-	}
+	//std::cout << "distances and parents:" << std::endl;
+	//graph_traits<graph_t>::vertex_iterator vi, vend;
+	//for (boost::tie(vi, vend) = vertices(g); vi != vend; ++vi) {
+	//	std::cout << "distance(" << *vi << ") = " << d[*vi] << ", ";
+	//	std::cout << "parent(" << *vi << ") = " << p[*vi] << std::endl;
+	//}
 
-	std::cout << "pa(" << p.at(p.size() - 1) << ")" << std::endl;
+	//std::cout << "pa(" << p.at(p.size() - 1) << ")" << std::endl;
 
 	std::vector<Point*> simplifiedTrace;
 	int currentIndex = trace.size() - 1;
