@@ -63,7 +63,7 @@ int main(int argc, char**argv) {
 	std::vector<std::string> files = std::vector<std::string>();
 	getdir(folderPath, files);
 
-	std::string file = homedir + "/data/linear-optimum.cvs";
+	std::string file = homedir + "/data/linear-optimum.csv";
 	std::ofstream output(file.c_str());
 	if (!output) {
 		std::cout << "Can  not open file : " << file << std::endl;
@@ -82,11 +82,11 @@ int main(int argc, char**argv) {
 		std::cout << files[i] << std::endl;
 		trace = buildTraceFromFile(folderPath + "/" + files[i]);
 
-		std::cout << " Computing with : " << trace.size() << " Points "
+		std::cout << "Simplifying " << trace.size() << " Points "
 				<< std::endl;
 
 		gettimeofday(&startTime, 0);
-//com::acme::EuclideanGeometry* eg = new com::acme::EuclideanGeometry();
+
 		com::acme::HaversineDistance* hd = new com::acme::HaversineDistance();
 		com::acme::LinearApproximationReferenceAlgorithm* algo =
 				new com::acme::LinearApproximationReferenceAlgorithm(hd);
@@ -94,7 +94,7 @@ int main(int argc, char**argv) {
 
 		gettimeofday(&endTime, 0);
 
-		diffMicro = endTime.tv_usec - startTime.tv_usec;
+		diffMicro = (endTime.tv_sec*1e6 + endTime.tv_usec) - (startTime.tv_sec*1e6 + startTime.tv_usec);
 
 		try {
 			output << trace.size() << ";" << result.size() << ";" << diffMicro

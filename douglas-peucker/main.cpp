@@ -63,7 +63,7 @@ int main(int argc, char**argv) {
 	std::vector<std::string> files = std::vector<std::string>();
 	getdir(folderPath, files);
 
-	std::string file = homedir + "/data/douglasPeucker.cvs";
+	std::string file = homedir + "/data/douglasPeucker.csv";
 	std::ofstream output(file.c_str());
 	if (!output) {
 		std::cout << "Can  not open file : " << file << std::endl;
@@ -93,7 +93,7 @@ int main(int argc, char**argv) {
 
 		gettimeofday(&endTime, 0);
 
-		diffMicro = endTime.tv_usec - startTime.tv_usec;
+		diffMicro = (endTime.tv_sec*1e6 + endTime.tv_usec) - (startTime.tv_sec*1e6 + startTime.tv_usec);
 
 		try {
 			output << trace.size() << ";" << result.size() << ";" << diffMicro
@@ -103,8 +103,7 @@ int main(int argc, char**argv) {
 			std::cout << "Could not write data " << std::endl;
 
 		}
-		//	writeResultToAFile(homedir + "/data/dp.cvs", trace.size(),
-		//			result.size(), diffMIcro);
+		result.size(), diffMIcro);
 
 		// TODO if program too slow comment out for-loop
 		clearTrace(trace);

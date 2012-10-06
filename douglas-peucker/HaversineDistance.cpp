@@ -33,12 +33,12 @@ int HaversineDistance::LONGITUDE = 0;
 int HaversineDistance::EARTH_VOLUMETRIC_MEAN_RADIUS = 6371000;
 
 HaversineDistance::HaversineDistance() {
-	std::cout << "Const HaversineDistance" << std::endl;
+	//std::cout << "Const HaversineDistance" << std::endl;
 
 }
 
 HaversineDistance::~HaversineDistance() {
-	std::cout << "Dest HaversineDistance" << std::endl;
+	//std::cout << "Dest HaversineDistance" << std::endl;
 }
 
 /*
