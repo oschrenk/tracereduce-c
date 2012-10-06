@@ -12,16 +12,13 @@
  *              eMail: info@q2web.de	http://www.q2web.de
  *
  *
- * Author:     hadoop
- *
- * Created:     Sep 28, 2012
+ * Author:     Oliver Schrenk <oliver.schrenk@q2web.de>
  *
  * Copyright (c) 2008 Q2WEB GmbH.
- * All rights reserved. 
+ * All rights reserved.
  *
  *******************************************************************************
  */
-
 #ifndef GEOMETRY_HPP_
 #define GEOMETRY_HPP_
 

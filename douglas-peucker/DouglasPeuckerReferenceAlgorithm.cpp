@@ -12,12 +12,10 @@
  *              eMail: info@q2web.de	http://www.q2web.de
  *
  *
- * Author:     hadoop
- *
- * Created:     Sep 27, 2012
+ * Author:     Oliver Schrenk <oliver.schrenk@q2web.de>
  *
  * Copyright (c) 2008 Q2WEB GmbH.
- * All rights reserved. 
+ * All rights reserved.
  *
  *******************************************************************************
  */
@@ -72,7 +70,7 @@ std::vector<Point*> DouglasPeuckerReferenceAlgorithm::run(
 	}
 
 	std::vector<Point*> resultList;
-//TDO compare ist nicht mehr da
+
 	// if no separation needed, just return start and end
 	if (maxIndex == -1 || (maximumDistance <= epsilon)) {
 		//resultList = std::vector<Point>;
@@ -97,8 +95,6 @@ std::vector<Point*> DouglasPeuckerReferenceAlgorithm::run(
 			upperTrace.push_back(trace.at(i));
 		}
 		std::vector<Point*> upperTraceResults = run(upperTrace);
-
-		//resultList = std::vector<Point>();
 
 		// assemble the result
 		std::vector<Point*>::iterator it;
