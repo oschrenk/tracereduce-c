@@ -33,20 +33,20 @@ DouglasPeuckerReferenceAlgorithm::DouglasPeuckerReferenceAlgorithm() {
 
 DouglasPeuckerReferenceAlgorithm::DouglasPeuckerReferenceAlgorithm(
 		Distance* distance) {
-	std::cout
-			<< "Const DouglasPeuckerReferenceAlgorithm(const Distance distance)"
-			<< std::endl;
+	//std::cout
+	//		<< "Const DouglasPeuckerReferenceAlgorithm(const Distance distance)"
+	//		<< std::endl;
 	this->distance = distance;
 }
 
 DouglasPeuckerReferenceAlgorithm::~DouglasPeuckerReferenceAlgorithm() {
-	std::cout << "Dest DouglasPeuckerReferenceAlgorithm" << std::endl;
+	//std::cout << "Dest DouglasPeuckerReferenceAlgorithm" << std::endl;
 }
 
 std::vector<Point*> DouglasPeuckerReferenceAlgorithm::run(
 		const std::vector<Point*> trace, const double pEpsilon) {
-	std::cout << "DouglasPeuckerReferenceAlgorithm::run(trace,pEpsilon)"
-			<< std::endl;
+	//std::cout << "DouglasPeuckerReferenceAlgorithm::run(trace,pEpsilon)"
+	//		<< std::endl;
 	epsilon = pEpsilon;
 	return run(trace);
 }
