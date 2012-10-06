@@ -29,12 +29,15 @@
 namespace com {
 namespace acme {
 
+//typedef std::vector<Point*> pointList;
+//typedef std::vector<Edge*> edgeList;
 class Point {
 
 public:
 	Point();
 	Point(double* pPoint);
 	Point( int time,  double* point);
+	Point(const Point& p);
 	virtual ~Point();
 	virtual int getTime();
 	virtual int getDimensions();

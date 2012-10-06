@@ -25,27 +25,27 @@
 #ifndef EUCLIDEANGEOMETRY_HPP_
 #define EUCLIDEANGEOMETRY_HPP_
 
-#include "Geometry.hpp"
+#include "Distance.hpp"
 #include "Point.hpp"
 
 namespace com {
 namespace acme {
 
-class EuclideanGeometry: public Geometry {
+class EuclideanGeometry: public Distance {
 public:
 	EuclideanGeometry();
 	virtual ~EuclideanGeometry();
 
-	virtual double distance(Point* point, Point* lineStart, Point* lineEnd);
+	virtual double distance(Point& point, Point& lineStart, Point& lineEnd);
 	virtual int compare(double a, double b);
 private:
-	static double length(Point* p);
-	static Point* cross(Point* a, Point* b);
-	static Point* distanceVector(Point* p, Point* a);
+	static double length(Point& p);
+	static Point* cross(Point& a, Point& b);
+	static Point* distanceVector(Point& p, Point& a);
 	static double square(double f);
 
-	static double distance3d(Point* point, Point* lineStart, Point* lineEnd);
-	static double distance2d(Point* point, Point* lineStart, Point* lineEnd);
+	static double distance3d(Point& point, Point& lineStart, Point& lineEnd);
+	static double distance2d(Point& point, Point& lineStart, Point& lineEnd);
 };
 
 }

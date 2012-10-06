@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-g -O2 -Wall -ansi -Wno-deprecated
-TARGET=linear-optimum
+TARGET=spline
 
 BOOST_HOME = /Users/university/local/include
 BOOST_INCLUDE = /Users/university/local/include
@@ -19,16 +19,27 @@ LDFLAGS += -lboost_graph
 
 OBJS=main.o
 OBJS+=Point.o
-OBJS+=LinearApproximationReferenceAlgorithm.o
+OBJS+=Arrays.o
+OBJS+=SplineInterpolationWithPointOmission.o
+OBJS+=CubicSplinesReferenceAlgorithm.o
 #OBJS+=EuclideanGeometry.o
-OBJS+=HaversineDistance.o
+#OBJS+=HaversineDistance.o
 
 all:$(TARGET)
 $(TARGET):$(OBJS)
 	$(CXX) $(OBJS) $(LIBS) $(LDFLAGS) -o $(TARGET)
 
-main.o:main.cpp LinearApproximationReferenceAlgorithm.hpp
+main.o:main.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c main.cpp -o main.o
+
+SplineInterpolationWithPointOmission.o: SplineInterpolationWithPointOmission.cpp SplineInterpolationWithPointOmission.hpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c SplineInterpolationWithPointOmission.cpp -o SplineInterpolationWithPointOmission.o
+
+CubicSplinesReferenceAlgorithm.o: CubicSplinesReferenceAlgorithm.cpp CubicSplinesReferenceAlgorithm.hpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c CubicSplinesReferenceAlgorithm.cpp -o CubicSplinesReferenceAlgorithm.o
+
+Arrays.o: Arrays.cpp Arrays.hpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c Arrays.cpp -o Arrays.o
 
 HaversineDistance.o:HaversineDistance.cpp HaversineDistance.hpp Distance.hpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c HaversineDistance.cpp -o HaversineDistance.o

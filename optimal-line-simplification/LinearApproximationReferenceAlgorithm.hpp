@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Geometry.hpp"
+#include "Distance.hpp"
 #include "Point.hpp"
 
 #include <boost/config.hpp>
@@ -49,7 +49,7 @@ typedef std::pair<int, int> Edge;
 class LinearApproximationReferenceAlgorithm {
 public:
 	LinearApproximationReferenceAlgorithm();
-	LinearApproximationReferenceAlgorithm(Geometry* geometry);
+	LinearApproximationReferenceAlgorithm(Distance* distance);
 	virtual ~LinearApproximationReferenceAlgorithm();
 
 	std::vector<Point*> run(std::vector<Point*> trace, double epsilon);
@@ -61,7 +61,7 @@ private:
 	static int DEFAULT_WEIGHT;
 
 	/** The geometry. */
-	Geometry* geometry;
+	Distance* distance;
 };
 }
 } /* namespace com */

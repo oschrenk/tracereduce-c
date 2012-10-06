@@ -30,22 +30,26 @@ namespace acme {
 int Point::NO_TIME = -1;
 
 Point::Point() {
-	std::cout << "Const Point" << std::endl;
+	//std::cout << "Const Point" << std::endl;
 }
 
 Point::Point(double* pPoint) {
-	std::cout << "Const Point(double* pPoint)" << std::endl;
+	//std::cout << "Const Point(double* pPoint)" << std::endl;
 	this->point = pPoint;
 }
 
 Point::Point(int time, double* point) {
-	std::cout << "Const Point(int time,double* pPoint)" << std::endl;
+	//std::cout << "Const Point(int time,double* pPoint)" << std::endl;
 	this->time = time;
 	this->point = point;
 }
 
+Point::Point(const Point& p) {
+	//std::cout << "CopyConst Point" << std::endl;
+}
 Point::~Point() {
-	std::cout << "Dest Point" << std::endl;
+	//std::cout << "Dest Point" << std::endl;
+	delete this->point;
 }
 /**
  * Gets the number of dimensions.

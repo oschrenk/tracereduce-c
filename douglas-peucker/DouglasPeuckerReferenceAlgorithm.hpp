@@ -28,27 +28,25 @@
 #include <iostream>
 #include <list>
 #include <vector>
-#include "Geometry.hpp"
+#include "Distance.hpp"
 
 namespace com {
 namespace acme {
 
-
-
 class DouglasPeuckerReferenceAlgorithm {
 public:
 	DouglasPeuckerReferenceAlgorithm();
-	DouglasPeuckerReferenceAlgorithm( Geometry* pGeometry);
+	DouglasPeuckerReferenceAlgorithm( Distance* distance);
 	virtual ~DouglasPeuckerReferenceAlgorithm();
 
-	std::vector<Point> run(const std::vector<Point> trace, const double epsilon);
-	std::vector<Point> run(const std::vector<Point> trace);
+	std::vector<Point*> run(const std::vector<Point*> trace, const double epsilon);
+	std::vector<Point*> run(const std::vector<Point*> trace);
 private:
 	/** The epsilon. */
 	double epsilon;
 
 	/** The geometry. */
-	 Geometry* geometry;
+	Distance* distance;
 };
 }
 } /* namespace com */

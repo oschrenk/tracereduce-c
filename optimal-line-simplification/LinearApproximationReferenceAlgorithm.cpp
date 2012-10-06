@@ -28,29 +28,28 @@
 #include <fstream>
 #include <algorithm>
 
-
 namespace com {
 namespace acme {
 int LinearApproximationReferenceAlgorithm::DEFAULT_WEIGHT = 1;
 
 LinearApproximationReferenceAlgorithm::LinearApproximationReferenceAlgorithm() {
-	// TODO Auto-generated constructor stub
+	std::cout << "Const LinearApproximationReferenceAlgorithm" << std::endl;
 
 }
 
 LinearApproximationReferenceAlgorithm::~LinearApproximationReferenceAlgorithm() {
-	// TODO Auto-generated destructor stub
+	std::cout << "Dest LinearApproximationReferenceAlgorithm" << std::endl;
 }
 LinearApproximationReferenceAlgorithm::LinearApproximationReferenceAlgorithm(
-		Geometry* geometry) {
-	this->geometry = geometry;
+		Distance* distance) {
+	this->distance = distance;
 }
 
 std::vector<Point*> LinearApproximationReferenceAlgorithm::run(
 		std::vector<Point*> trace, double epsilon) {
 
-	std::vector<Point*> polylineSimplification = getPolylineSimplification(trace,
-			epsilon);
+	std::vector<Point*> polylineSimplification = getPolylineSimplification(
+			trace, epsilon);
 
 	std::vector<Point*> simplifiedTrace;
 
@@ -86,20 +85,20 @@ std::vector<Point*> LinearApproximationReferenceAlgorithm::getPolylineSimplifica
 	vertex_descriptor source = vertex(0, g);
 
 	// run dijkstra
-	dijkstra_shortest_paths(g, source, predecessor_map(&p[0]).distance_map(&d[0]));
+	dijkstra_shortest_paths(g, source,
+			predecessor_map(&p[0]).distance_map(&d[0]));
 
 	std::cout << "distances and parents:" << std::endl;
 	graph_traits<graph_t>::vertex_iterator vi, vend;
 	for (boost::tie(vi, vend) = vertices(g); vi != vend; ++vi) {
 		std::cout << "distance(" << *vi << ") = " << d[*vi] << ", ";
-		std::cout << "parent(" << *vi << ") = " << p[*vi]
-				<< std::endl;
+		std::cout << "parent(" << *vi << ") = " << p[*vi] << std::endl;
 	}
 
-	std::cout << "pa(" << p.at(p.size()-1) << ")" << std::endl;
+	std::cout << "pa(" << p.at(p.size() - 1) << ")" << std::endl;
 
 	std::vector<Point*> simplifiedTrace;
-	int currentIndex = trace.size()-1;
+	int currentIndex = trace.size() - 1;
 	simplifiedTrace.push_back(trace.at(currentIndex));
 	while ((currentIndex = p.at(currentIndex)) != 0) {
 		simplifiedTrace.push_back(trace.at(currentIndex));
@@ -145,17 +144,16 @@ std::vector<Edge> LinearApproximationReferenceAlgorithm::setupEdges(
 			for (int intermediatePointIndex = lineStartIndex + 1;
 					intermediatePointIndex < lineEndIndex;
 					intermediatePointIndex++) {
-				double delta = geometry->distance(
-						points.at(intermediatePointIndex),
-						points.at(lineStartIndex), points.at(lineEndIndex));
+				double delta = distance->distance(
+						*points.at(intermediatePointIndex),
+						*points.at(lineStartIndex), *points.at(lineEndIndex));
 
-				if (geometry->compare(delta, maxDelta) > 0) {
+				if (delta > maxDelta) {
 					maxDelta = delta;
 				}
 			}
-			if (geometry->compare(maxDelta, epsilon) <= 0) {
-				edgeList.push_back(Edge(lineStartIndex,
-								lineEndIndex));
+			if (maxDelta <= epsilon) {
+				edgeList.push_back(Edge(lineStartIndex, lineEndIndex));
 			}
 		}
 	}

@@ -44,8 +44,7 @@
 #include <pwd.h>
 
 #include "Point.hpp"
-#include "HaversineDistance.hpp"
-#include "DouglasPeuckerReferenceAlgorithm.hpp"
+#include "CubicSplinesReferenceAlgorithm.hpp"
 
 int getdir(std::string dir, std::vector<std::string> &files);
 std::vector<com::acme::Point*> buildTraceFromFile(std::string file);
@@ -65,7 +64,7 @@ int main(int argc, char**argv) {
 	std::vector<std::string> files = std::vector<std::string>();
 	getdir(folderPath, files);
 
-	std::string file = homedir + "/data/douglasPeucker.cvs";
+	std::string file = homedir + "/data/spline.cvs";
 	std::ofstream output(file.c_str());
 	if (!output) {
 		std::cout << "Can  not open file : " << file << std::endl;
@@ -88,11 +87,9 @@ int main(int argc, char**argv) {
 				<< std::endl;
 
 		gettimeofday(&startTime, 0);
-		com::acme::HaversineDistance* eg = new com::acme::HaversineDistance();
-			com::acme::DouglasPeuckerReferenceAlgorithm* dprAlgo =
-					new com::acme::DouglasPeuckerReferenceAlgorithm(eg);
-			std::vector<com::acme::Point*> result = dprAlgo->run(trace, 1);
-
+		com::acme::CubicSplinesReferenceAlgorithm* algo =
+				new com::acme::CubicSplinesReferenceAlgorithm();
+		std::vector<com::acme::Point*> result = algo->run(trace, 1);
 		gettimeofday(&endTime, 0);
 
 		diffMicro = endTime.tv_usec - startTime.tv_usec;
@@ -105,13 +102,9 @@ int main(int argc, char**argv) {
 			std::cout << "Could not write data " << std::endl;
 
 		}
-		//	writeResultToAFile(homedir + "/data/dp.cvs", trace.size(),
-		//			result.size(), diffMIcro);
-
 		// TODO if program too slow comment out for-loop
 		clearTrace(trace);
-		delete dprAlgo;
-		delete eg;
+		delete algo;
 	}
 	output.close();
 	return 0;

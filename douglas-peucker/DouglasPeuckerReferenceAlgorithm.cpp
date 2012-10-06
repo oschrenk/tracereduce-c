@@ -34,27 +34,28 @@ DouglasPeuckerReferenceAlgorithm::DouglasPeuckerReferenceAlgorithm() {
 }
 
 DouglasPeuckerReferenceAlgorithm::DouglasPeuckerReferenceAlgorithm(
-		 Geometry* pGeometry) {
+		Distance* distance) {
 	std::cout
-			<< "Const DouglasPeuckerReferenceAlgorithm(const Geometry pGeometry)"
+			<< "Const DouglasPeuckerReferenceAlgorithm(const Distance distance)"
 			<< std::endl;
-	geometry = pGeometry;
+	this->distance = distance;
 }
 
 DouglasPeuckerReferenceAlgorithm::~DouglasPeuckerReferenceAlgorithm() {
 	std::cout << "Dest DouglasPeuckerReferenceAlgorithm" << std::endl;
 }
 
-std::vector<Point> DouglasPeuckerReferenceAlgorithm::run(
-		const std::vector<Point> trace, const double pEpsilon) {
-	std::cout << "DouglasPeuckerReferenceAlgorithm::run(trace,pEpsilon)" << std::endl;
+std::vector<Point*> DouglasPeuckerReferenceAlgorithm::run(
+		const std::vector<Point*> trace, const double pEpsilon) {
+	std::cout << "DouglasPeuckerReferenceAlgorithm::run(trace,pEpsilon)"
+			<< std::endl;
 	epsilon = pEpsilon;
 	return run(trace);
 }
 
-std::vector<Point> DouglasPeuckerReferenceAlgorithm::run(
-		const std::vector<Point> trace) {
-	std::cout << "DouglasPeuckerReferenceAlgorithm::run(trace) trace size : " <<trace.size()<< std::endl;
+std::vector<Point*> DouglasPeuckerReferenceAlgorithm::run(
+		const std::vector<Point*> trace) {
+//	std::cout << "DouglasPeuckerReferenceAlgorithm::run(trace) trace size : " <<trace.size()<< std::endl;
 	const int traceLength = trace.size();
 
 	// determine the node at which the trace will be separated
@@ -62,45 +63,45 @@ std::vector<Point> DouglasPeuckerReferenceAlgorithm::run(
 	int maxIndex = -1;
 
 	for (int i = 1; i < traceLength - 1; i++) {
-		double distance = geometry->distance(trace.at(i), trace.at(0),
-				trace.at(traceLength - 1));
-		if (geometry->compare(distance, maximumDistance) > 0) {
-			maximumDistance = distance;
+		double tmpDistance = distance->distance(*trace.at(i), *trace.at(0),
+				*trace.at(traceLength - 1));
+		if (tmpDistance > maximumDistance) {
+			maximumDistance = tmpDistance;
 			maxIndex = i;
 		}
 	}
 
-	std::vector<Point> resultList;
-
+	std::vector<Point*> resultList;
+//TDO compare ist nicht mehr da
 	// if no separation needed, just return start and end
-	if (maxIndex == -1 || geometry->compare(maximumDistance, epsilon) <= 0) {
+	if (maxIndex == -1 || (maximumDistance <= epsilon)) {
 		//resultList = std::vector<Point>;
 		resultList.push_back(trace.at(0));
 		resultList.push_back(trace.at(traceLength - 1));
 	} else {
 		// otherwise continue:
 		// minimize lower part
-		std::vector<Point> lowerTrace;
+		std::vector<Point*> lowerTrace;
 		for (int i = 0; i <= maxIndex; i++) {
 			lowerTrace.push_back(trace.at(i));
 		}
-		std::vector<Point> lowerTraceResults = run(lowerTrace);
+		std::vector<Point*> lowerTraceResults = run(lowerTrace);
 		// remove last element, cause this is equal to the first element in
 		// the upper part result list
 		lowerTraceResults.erase(
 				lowerTraceResults.begin() + lowerTraceResults.size() - 1);
 
 		// minimize upper part
-		std::vector<Point> upperTrace;
+		std::vector<Point*> upperTrace;
 		for (int i = maxIndex; i < traceLength; i++) {
 			upperTrace.push_back(trace.at(i));
 		}
-		std::vector<Point> upperTraceResults = run(upperTrace);
+		std::vector<Point*> upperTraceResults = run(upperTrace);
 
 		//resultList = std::vector<Point>();
 
 		// assemble the result
-		std::vector<Point>::iterator it;
+		std::vector<Point*>::iterator it;
 		it = resultList.begin();
 		resultList.insert(it, lowerTraceResults.begin(),
 				lowerTraceResults.end());

@@ -46,10 +46,10 @@ Point::Point(int time, double* point) {
 
 Point::Point(const Point& p) {
 	//std::cout << "CopyConst Point" << std::endl;
+	delete this->point;
 }
 Point::~Point() {
 	//std::cout << "Dest Point" << std::endl;
-	delete this->point;
 }
 /**
  * Gets the number of dimensions.

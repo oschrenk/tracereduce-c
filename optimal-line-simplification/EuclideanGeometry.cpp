@@ -38,11 +38,11 @@ EuclideanGeometry::~EuclideanGeometry() {
 	std::cout << "Dest EuclideanGeometry" << std::endl;
 }
 
-double EuclideanGeometry::distance(Point* point, Point* lineStart,
-		Point* lineEnd) {
+double EuclideanGeometry::distance(Point& point, Point& lineStart,
+		Point& lineEnd) {
 //	std::cout << "EuclideanGeometry::distance dimensions: "<<lineStart->getDimensions() << std::endl;
 
-	int dimensions = lineStart->getDimensions();
+	int dimensions = lineStart.getDimensions();
 	if (dimensions == 2) {
 		return distance2d(point, lineStart, lineEnd);
 	}
@@ -65,21 +65,22 @@ double EuclideanGeometry::distance(Point* point, Point* lineStart,
  *
  * @return
  */
-double EuclideanGeometry::distance2d(Point* point, Point* lineStart,
-		Point* lineEnd) {
-//	std::cout << "EuclideanGeometry::distance2d" << std::endl;
-	double x_0 = point->get(0);
-	double y_0 = point->get(1);
-	double x_1 = lineStart->get(0);
-	double y_1 = lineStart->get(1);
-	double x_2 = lineEnd->get(0);
-	double y_2 = lineEnd->get(1);
+double EuclideanGeometry::distance2d(Point& point, Point& lineStart,
+		Point& lineEnd) {
+	// std::cout << "EuclideanGeometry::distance2d" << std::endl;
+	double x_0 = point.get(0);
+	double y_0 = point.get(1);
+	double x_1 = lineStart.get(0);
+	double y_1 = lineStart.get(1);
+	double x_2 = lineEnd.get(0);
+	double y_2 = lineEnd.get(1);
 
 	double nom = std::abs(
 			(x_2 - x_1) * (y_1 - y_0) - (x_1 - x_0) * (y_2 - y_1));
 	double denom = std::sqrt(
 			(x_2 - x_1) * (x_2 - x_1) + (y_2 - y_1) * (y_2 - y_1));
 
+//	 std::cout << "Ende EuclideanGeometry::distance2d" << std::endl;
 	return nom / denom;
 }
 
@@ -94,12 +95,12 @@ double EuclideanGeometry::distance2d(Point* point, Point* lineStart,
  *            the line end
  * @return the float
  */
-double EuclideanGeometry::distance3d(Point* point, Point* lineStart,
-		Point* lineEnd) {
+double EuclideanGeometry::distance3d(Point& point, Point& lineStart,
+		Point& lineEnd) {
 //	std::cout << "EuclideanGeometry::distance3d" << std::endl;
 	Point* lineVector = distanceVector(lineEnd, lineStart);
-	return length(cross(distanceVector(point, lineStart), lineVector))
-			/ length(lineVector);
+	return length(*cross(*distanceVector(point, lineStart), *lineVector))
+			/ length(*lineVector);
 }
 
 /*
@@ -113,13 +114,15 @@ int EuclideanGeometry::compare(double a, double b) {
 	if (a > b) {
 		return 1; // Neither val is NaN, thisVal is larger
 	}
-//	std::cout << "EuclideanGeometry::compare" << std::endl;
+
+//	std::cout << "EuclideanGeometry::compare" << a<<" : "<<b<<std::endl;
 	// Cannot use doubleToRawLongBits because of possibility of NaNs.
 //		 long thisBits = Double.doubleToLongBits(a);
 //		 long anotherBits = Double.doubleToLongBits(b);
 
-	long thisBits = 1;
-	long anotherBits = 2;
+//Wegen rundungsfehler, wurde 0,5 dazu addiert
+	long thisBits = static_cast<long>(a+ 0.5);
+	long anotherBits = static_cast<long>(b+ 0.5);
 	return (thisBits == anotherBits ? 0 : // Values are equal
 			(thisBits < anotherBits ? -1 : // (-0.0, 0.0) or (!NaN, NaN)
 					1)); // (0.0, -0.0) or (NaN, !NaN)
@@ -146,11 +149,11 @@ double EuclideanGeometry::square(double f) {
  *            the a
  * @return the point
  */
-Point* EuclideanGeometry::distanceVector(Point* p, Point* a) {
-	int dimensions = p->getDimensions();
+Point* EuclideanGeometry::distanceVector(Point& p, Point& a) {
+	int dimensions = p.getDimensions();
 	double* c = new double[dimensions];
 	for (int i = 0; i < dimensions; i++) {
-		c[i] = p->get(i) - a->get(i);
+		c[i] = p.get(i) - a.get(i);
 	}
 	return new Point(c);
 
@@ -165,10 +168,10 @@ Point* EuclideanGeometry::distanceVector(Point* p, Point* a) {
  *            the b
  * @return the point
  */
-Point* EuclideanGeometry::cross(Point* a, Point* b) {
-	double c[] = { a->get(1) * b->get(2) - a->get(2) * b->get(1), a->get(2)
-			* b->get(0) - a->get(0) * b->get(2), a->get(0) * b->get(1)
-			- a->get(1) * b->get(0) };
+Point* EuclideanGeometry::cross(Point& a, Point& b) {
+	double c[] = { a.get(1) * b.get(2) - a.get(2) * b.get(1), a.get(2)
+			* b.get(0) - a.get(0) * b.get(2), a.get(0) * b.get(1)
+			- a.get(1) * b.get(0) };
 //	double* c;
 	return new Point(c);
 }
@@ -180,11 +183,11 @@ Point* EuclideanGeometry::cross(Point* a, Point* b) {
  *            the p
  * @return the float
  */
-double EuclideanGeometry::length(Point* p) {
-	int dimensions = p->getDimensions();
+double EuclideanGeometry::length(Point& p) {
+	int dimensions = p.getDimensions();
 	double sumSquared = 0;
 	for (int i = 0; i < dimensions; i++) {
-		sumSquared = sumSquared + square(p->get(i));
+		sumSquared = sumSquared + square(p.get(i));
 	}
 	return std::sqrt(sumSquared);
 }

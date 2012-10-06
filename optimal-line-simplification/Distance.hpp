@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *  EuclideanGeometry.hpp
+ *  Geometry.hpp
  *
  *******************************************************************************
  *
@@ -22,32 +22,20 @@
  *******************************************************************************
  */
 
-#ifndef EUCLIDEANGEOMETRY_HPP_
-#define EUCLIDEANGEOMETRY_HPP_
+#ifndef GEOMETRY_HPP_
+#define GEOMETRY_HPP_
 
-#include "Distance.hpp"
 #include "Point.hpp"
+
 
 namespace com {
 namespace acme {
 
-class EuclideanGeometry: public Distance {
+class Distance {
 public:
-	EuclideanGeometry();
-	virtual ~EuclideanGeometry();
-
-	virtual double distance(Point& point, Point& lineStart, Point& lineEnd);
-	virtual int compare(double a, double b);
-private:
-	static double length(Point& p);
-	static Point* cross(Point& a, Point& b);
-	static Point* distanceVector(Point& p, Point& a);
-	static double square(double f);
-
-	static double distance3d(Point& point, Point& lineStart, Point& lineEnd);
-	static double distance2d(Point& point, Point& lineStart, Point& lineEnd);
+	~Distance(){}
+	virtual double distance(Point& point, Point& lineStart, Point& lineEnd)=0;
 };
-
 }
-} /* namespace opencl */
-#endif /* EUCLIDEANGEOMETRY_HPP_ */
+} /* namespace com */
+#endif /* GEOMETRY_HPP_ */
