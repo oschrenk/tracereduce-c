@@ -53,6 +53,23 @@ std::vector<com::acme::Point*> getTestPoints();
 void clearTrace(std::vector<com::acme::Point*> trace);
 
 int main(int argc, char**argv) {
+	double epsilon = 1;
+	std::stringstream epsilonStr;
+	int c = 0;
+	while ((c = getopt(argc, argv, "e:")) != -1) {
+		switch (c) {
+		case 'e':
+			epsilonStr << optarg;
+			epsilonStr >> epsilon;
+			break;
+		default:
+			std::cout << "usage : ./linear-optimum -e t[t epsilon] "
+					<< std::endl;
+			break;
+		}
+	}
+	std::cout << "Using epsilon : " << epsilon << std::endl;
+
 	timeval startTime, endTime;
 
 	std::vector<com::acme::Point*> trace;
@@ -90,7 +107,7 @@ int main(int argc, char**argv) {
 		com::acme::HaversineDistance* hd = new com::acme::HaversineDistance();
 		com::acme::LinearApproximationReferenceAlgorithm* algo =
 				new com::acme::LinearApproximationReferenceAlgorithm(hd);
-		std::vector<com::acme::Point*> result = algo->run(trace, 1);
+		std::vector<com::acme::Point*> result = algo->run(trace, epsilon);
 
 		gettimeofday(&endTime, 0);
 
