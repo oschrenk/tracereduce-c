@@ -59,7 +59,7 @@ int main(int argc, char**argv) {
 
 	struct passwd *pw = getpwuid(getuid());
 	std::string homedir(pw->pw_dir);
-	std::string folderPath(homedir + "/data/highway");
+	std::string folderPath(homedir + "/data/current");
 	std::vector<std::string> files = std::vector<std::string>();
 	getdir(folderPath, files);
 
