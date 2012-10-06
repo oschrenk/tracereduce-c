@@ -7,7 +7,7 @@ Requirements
 - [boost](http://www.boost.org/)
 - [GNU make](http://www.gnu.org/software/make/)
 
-Altough the quasi default package manager [homebrew](http://mxcl.github.com/homebrew/) for OSX supports boost, it somehow doesn't get integrated into the system.
+Altough the quasi default package manager [homebrew](http://mxcl.github.com/homebrew/) for OSX supports boost, it somehow doesn't get properly integrated into the system (at least for me)
 
 Building [boost](http://www.boost.org/) for OSX 10.8.2 from svn (via git) and install it into `$HOME/local
 
@@ -39,4 +39,10 @@ I turned out I forgot to include `-lboost_system`. In my case:
 
 I still got
 
+	dyld: Library not loaded: libboost_system.dylib
+
+when executing the application. The solution was to run
+
 	export DYLD_LIBRARY_PATH=$HOME/local/lib:$DYLD_LIBRARY_PATH
+
+before execution.
