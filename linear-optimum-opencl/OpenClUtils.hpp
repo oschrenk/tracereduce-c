@@ -11,7 +11,12 @@
 //#define DATA_SIZE (4)
 #define MAX_SOURCE_SIZE (10000)
 
+#if defined(__APPLE__) || defined(__MACOSX)
+#include <OpenCL/cl.h>
+#else
 #include <CL/cl.h>
+#endif
+
 #include <iostream>
 namespace com {
 namespace acme {

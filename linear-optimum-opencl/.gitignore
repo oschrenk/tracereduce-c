@@ -1,0 +1,6 @@
+DeviceHandler.o
+LinearOptimumOpenClAlgorithm.o
+OpenClUtils.o
+Point.o
+main.o
+douglaPeucker-opencl

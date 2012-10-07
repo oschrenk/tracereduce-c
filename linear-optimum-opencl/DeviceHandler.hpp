@@ -8,7 +8,11 @@
 #ifndef DEVICEHANDLER_HPP_
 #define DEVICEHANDLER_HPP_
 
+#if defined(__APPLE__) || defined(__MACOSX)
+#include <OpenCL/cl.h>
+#else
 #include <CL/cl.h>
+#endif
 
 namespace com {
 namespace acme {

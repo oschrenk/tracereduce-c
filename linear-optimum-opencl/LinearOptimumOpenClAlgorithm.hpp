@@ -17,7 +17,7 @@
  * Created:     Oct 6, 2012
  *
  * Copyright (c) 2008 Q2WEB GmbH.
- * All rights reserved. 
+ * All rights reserved.
  *
  *******************************************************************************
  */
@@ -26,7 +26,12 @@
 #define LINEAROPTIMUMOPENCLALGORITHM_HPP_
 #include <vector>
 #include <iostream>
+
+#if defined(__APPLE__) || defined(__MACOSX)
+#include <OpenCL/cl.h>
+#else
 #include <CL/cl.h>
+#endif
 
 #include "Point.hpp"
 #include "DeviceHandler.hpp"

@@ -17,7 +17,7 @@
  * Created:     Oct 6, 2012
  *
  * Copyright (c) 2008 Q2WEB GmbH.
- * All rights reserved. 
+ * All rights reserved.
  *
  *******************************************************************************
  */
@@ -27,6 +27,20 @@
 
 namespace com {
 namespace acme {
+
+inline int
+pow2roundup (int x)
+{
+    if (x < 0)
+        return 0;
+    --x;
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    return x+1;
+}
 
 int LinearOptimumOpenClAlgorithm::DEFAULT_SOURCE_ID = 0;
 
@@ -114,7 +128,7 @@ std::vector<Point*> LinearOptimumOpenClAlgorithm::run() {
 	float* longitudeXCoordinatesPointer = &longitudeXCoordinates[0];
 	float* latitudeYCoordinatesPointer = &latitudeYCoordinates[0];
 
-	memObject = new cl_mem[3];
+	 memObject = new cl_mem[3];
 	/* Create Buffer Object */
 	// x coordinates
 	memObject[0] = clCreateBuffer(_dh->getContext(),
@@ -125,8 +139,12 @@ std::vector<Point*> LinearOptimumOpenClAlgorithm::run() {
 			CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
 			length * sizeof(cl_float), NULL, &ret);
 	// distance
-	memObject[2] = clCreateBuffer(_dh->getContext(), CL_MEM_READ_ONLY,
+	std::cout << memObject[2] << std::endl;
+
+	memObject[2] = clCreateBuffer(_dh->getContext(), CL_MEM_READ_WRITE,
 			length * sizeof(cl_float), NULL, &ret);
+
+	std::cout << memObject[2] << std::endl;
 
 	/* Copy input data to the memory buffer */
 	ret = clEnqueueWriteBuffer(queue, memObject[0], CL_TRUE, 0,
@@ -137,20 +155,9 @@ std::vector<Point*> LinearOptimumOpenClAlgorithm::run() {
 			NULL);
 
 	std::cout << " 3 " << std::endl;
-//	// x coordinates
-//	memObject[0] = clCreateBuffer(context,
-//			CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_float * length,
-//			longitudeXCoordinatesPointer, null);
-//	// y coordinates
-//	memObject[1] = clCreateBuffer(context,
-//			CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_float * length,
-//			latitudeYCoordinatesPointer, null);
-//	// distance
-//	memObject[2] = clCreateBuffer(context, CL_MEM_READ_WRITE,
-//			Sizeof.cl_float * length, null, null);
 
-// Set default arguments for the kernels
-// distanceKernel
+	// Set default arguments for the kernels
+	// distanceKernel
 	ret = clSetKernelArg(distanceKernel, 0, sizeof(cl_mem),
 			(void *) &memObject[0]);
 	ret = clSetKernelArg(distanceKernel, 1, sizeof(cl_mem),
@@ -158,15 +165,12 @@ std::vector<Point*> LinearOptimumOpenClAlgorithm::run() {
 	ret = clSetKernelArg(distanceKernel, 2, sizeof(cl_mem),
 			(void *) &memObject[2]);
 
-//	clSetKernelArg(distanceKernel, 0, Sizeof.cl_mem, Pointer.to(memObject[0]));
-//	clSetKernelArg(distanceKernel, 1, Sizeof.cl_mem, Pointer.to(memObject[1]));
-//	clSetKernelArg(distanceKernel, 2, Sizeof.cl_mem, Pointer.to(memObject[2]));
 	// maximumKernel
 	ret = clSetKernelArg(maximumKernel, 0, sizeof(cl_mem),
 			(void *) &memObject[2]);
 
 	std::cout << " 3a " << std::endl;
-//	clSetKernelArg(maximumKernel, 0, Sizeof.cl_mem, Pointer.to(memObject[2]));
+	//	clSetKernelArg(maximumKernel, 0, Sizeof.cl_mem, Pointer.to(memObject[2]));
 
 	// setup edges
 	// 'lineStartIndex' and 'lineEndIndex' create virtual edge
@@ -192,11 +196,8 @@ std::vector<Point*> LinearOptimumOpenClAlgorithm::run() {
 			std::cout << " 3c : " << lineEndIndex << std::endl;
 
 			float fromX = longitudeXCoordinates[lineStartIndex];
-
 			float fromY = latitudeYCoordinates[lineStartIndex];
-
 			float toX = longitudeXCoordinates[lineEndIndex];
-
 			float toY = latitudeYCoordinates[lineEndIndex];
 
 			std::cout << " 3cc : " << lineEndIndex << std::endl;
@@ -277,27 +278,6 @@ std::vector<Point*> LinearOptimumOpenClAlgorithm::run() {
 	ret = clEnqueueWriteBuffer(queue, memObject[1], CL_TRUE, 0,
 			length * sizeof(cl_float), edgeArrayPointer, 0, NULL, NULL);
 
-	std::cout << " 77 " << std::endl;
-//	memObject[0] = clCreateBuffer(context,
-//			CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-//			Sizeof.cl_uint * vertexArray.length, vertexArrayPointer, null);
-//	// __global uint *edgeArray
-//	memObject[1] = clCreateBuffer(context,
-//			CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_uint * edgeCount,
-//			edgeArrayPointer, null);
-//	// __global uint *maskArray
-//	memObject[2] = clCreateBuffer(context, CL_MEM_READ_WRITE,
-//			Sizeof.cl_uint * vertexCount, null, null);
-//	// __global float *costArray,
-//	memObject[3] = clCreateBuffer(context, CL_MEM_READ_WRITE,
-//			Sizeof.cl_uint * vertexCount, null, null);
-//	// __global float *updatingCostArray,
-//	memObject[4] = clCreateBuffer(context, CL_MEM_READ_WRITE,
-//			Sizeof.cl_uint * vertexCount, null, null);
-//	// __global uint *parentVertexArray,
-//	memObject[5] = clCreateBuffer(context, CL_MEM_READ_WRITE,
-//			Sizeof.cl_uint * vertexCount, null, null);
-
 	std::cout << " 7a " << std::endl;
 	std::vector<Point*> simplifiedTrace = runDijkstra(vertexArray.size(),
 			edgeArray.size());
@@ -343,68 +323,61 @@ bool LinearOptimumOpenClAlgorithm::isValidEdge(int leftOffset, int rightOffset,
 	int e[] = { toY };
 	ret = clSetKernelArg(distanceKernel, 7, sizeof(cl_float), (void *) e);
 
-//	clSetKernelArg(distanceKernel, 3, Sizeof.cl_uint, Pointer.to(new int[] {
-//			leftOffset }));
-//	clSetKernelArg(distanceKernel, 4, Sizeof.cl_float, Pointer.to(new float[] {
-//			fromX }));
-//	clSetKernelArg(distanceKernel, 5, Sizeof.cl_float, Pointer.to(new float[] {
-//			fromY }));
-//	clSetKernelArg(distanceKernel, 6, Sizeof.cl_float, Pointer.to(new float[] {
-//			toX }));
-//	clSetKernelArg(distanceKernel, 7, Sizeof.cl_float, Pointer.to(new float[] {
-//			toY }));
-
 	int length = rightOffset - leftOffset + 1;
 	size_t global_item_size = length;
+
+	std::cout << " leftOffset : " << leftOffset << std::endl;
+	std::cout << " rightOffset : " << rightOffset << std::endl;
+	std::cout << " length : " << length << std::endl;
+
 	size_t local_item_size = DEFAULT_LOCAL_WORKSIZE;
-//	clEnqueueNDRangeKernel(queue, distanceKernel, 1, null,
-//			l, DEFAULT_LOCAL_WORKSIZE, 0, null, null);
 	clEnqueueNDRangeKernel(queue, distanceKernel, 1, NULL, &global_item_size,
 			&local_item_size, 0, NULL, NULL);
 	clEnqueueBarrier(queue);
 
 	// 2. get maximum distance
 	int h[] = { leftOffset };
-	ret = clSetKernelArg(distanceKernel, 1, sizeof(cl_uint), (void *) h);
+	ret = clSetKernelArg(maximumKernel, 1, sizeof(cl_uint), (void *) h);
 
 	int i[] = { rightOffset };
-	ret = clSetKernelArg(distanceKernel, 2, sizeof(cl_uint), (void *) i);
-//	clSetKernelArg(maximumKernel, 1, Sizeof.cl_uint, Pointer.to(new int[] {
-//			leftOffset }));
-//	clSetKernelArg(maximumKernel, 2, Sizeof.cl_uint, Pointer.to(new int[] {
-//			rightOffset }));
+	ret = clSetKernelArg(maximumKernel, 2, sizeof(cl_uint), (void *) i);
 
-//	long globalWorkSize = Integers.nextBinary(length);
-	long globalWorkSize = length;
-	//TODO ?????????
+	long globalWorkSize = pow2roundup(length);
+
 	for (int pass = 0; globalWorkSize > 1; pass++) {
+
+		globalWorkSize = globalWorkSize>>1;
+
 		std::cout << " pass : " << pass << " : - : " << globalWorkSize
 				<< std::endl;
-		//TODO globalWorkSize >>= 1 ????????????
-		globalWorkSize = globalWorkSize / 2;
+
 		global_item_size = globalWorkSize;
 		int j[] = { globalWorkSize };
+
+		std::cout << " pass2 : " << pass << " : - : " << globalWorkSize
+				<< std::endl;
+
 		ret = clSetKernelArg(maximumKernel, 3, sizeof(cl_uint), (void *) j);
+
 		clEnqueueNDRangeKernel(queue, maximumKernel, 1, NULL, &global_item_size,
 				&local_item_size, 0, NULL, NULL);
 
-//		clSetKernelArg(maximumKernel, 3, Sizeof.cl_uint, Pointer.to(new int[] {
-//				pass }));
-//		clEnqueueNDRangeKernel(queue, maximumKernel, 1, null, new long[] {
-//				globalWorkSize >>= 1 }, DEFAULT_LOCAL_WORKSIZE, 0, null, null);
-//		std::cout<<" a pass : "<<pass<<std::endl;
 		clEnqueueBarrier(queue);
 		/* Finalization */
-//		ret = clFlush(queue);
+		ret = clFlush(queue);
 //		ret = clFinish(queue);
-//		std::cout<<" b pass : "<<pass<<std::endl;
 	}
 
+	std::cout << " 4 "	<< std::endl;
+
 	/* Transfer result to host */
-	float* values = new float[length];
+	float *values = (float *) malloc( 2*sizeof(float) );
+	std::cout << memObject[2] << std::endl;
 	ret = clEnqueueReadBuffer(queue, memObject[2], CL_TRUE,
-			sizeof(cl_float) * leftOffset, sizeof(cl_float) * 2, values, 0,
+			0, sizeof(float) * 2, values, 0,
 			NULL, NULL);
+
+	std::cout << " 4a "	<< std::endl;
 
 	// make sure all read operations are done before rerunning
 	clEnqueueBarrier(queue);
@@ -433,21 +406,6 @@ std::vector<Point*> LinearOptimumOpenClAlgorithm::runDijkstra(int vertexCount,
 			memObject[5]);
 	int a[1] = { DEFAULT_SOURCE_ID };
 	ret = clSetKernelArg(dijkstraInitializationKernel, 4, sizeof(cl_mem), a);
-
-//	clSetKernelArg(dijkstraInitializationKernel, 0, Sizeof.cl_mem,
-//			Pointer.to(memObject[2]));
-//	// __global float *costArray,
-//	clSetKernelArg(dijkstraInitializationKernel, 1, Sizeof.cl_mem,
-//			Pointer.to(memObject[3]));
-//	// __global float *updatingCostArray,
-//	clSetKernelArg(dijkstraInitializationKernel, 2, Sizeof.cl_mem,
-//			Pointer.to(memObject[4]));
-//	// __global uint *parentVertexArray,
-//	clSetKernelArg(dijkstraInitializationKernel, 3, Sizeof.cl_mem,
-//			Pointer.to(memObject[5]));
-//	// int sourceVertexId
-//	clSetKernelArg(dijkstraInitializationKernel, 4, Sizeof.cl_uint,
-//			Pointer.to(new int[] { DEFAULT_SOURCE_ID }));
 
 	//long globalWorkSize[1] = { vertexCount };
 	size_t global_item_size = vertexCount;
